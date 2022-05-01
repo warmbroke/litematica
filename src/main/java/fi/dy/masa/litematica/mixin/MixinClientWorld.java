@@ -1,6 +1,8 @@
 package fi.dy.masa.litematica.mixin;
 
 import java.util.function.Supplier;
+
+import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,19 +23,13 @@ import fi.dy.masa.litematica.util.SchematicWorldRefresher;
 @Mixin(ClientWorld.class)
 public abstract class MixinClientWorld extends World
 {
-    private MixinClientWorld(MutableWorldProperties properties,
-                             RegistryKey<World> registryRef,
-                             RegistryEntry<DimensionType> registryEntry,
-                             Supplier<Profiler> profiler,
-                             boolean isClient,
-                             boolean debugWorld,
-                             long seed)
-    {
-        super(properties, registryRef, registryEntry, profiler, isClient, debugWorld, seed);
+
+    protected MixinClientWorld(MutableWorldProperties properties, RegistryKey<World> registryRef, RegistryEntry<DimensionType> dimension, Supplier<Profiler> supplier, boolean isClient, boolean debugWorld, long seed, int maxChainedNeighborUpdates) {
+        super(properties, registryRef, dimension, supplier, isClient, debugWorld, seed, maxChainedNeighborUpdates);
     }
 
-    @Inject(method = "setBlockStateWithoutNeighborUpdates", at = @At("HEAD"))
-    private void onSetBlockStateWithoutNeighborUpdates(BlockPos pos, BlockState state, CallbackInfo ci)
+    @Inject(method = "handleBlockUpdate", at = @At("HEAD"))
+    private void onSetBlockStateWithoutNeighborUpdates(BlockPos pos, BlockState state, int flags, CallbackInfo ci)
     {
         SchematicVerifier.markVerifierBlockChanges(pos);
 
@@ -43,4 +39,19 @@ public abstract class MixinClientWorld extends World
             SchematicWorldRefresher.INSTANCE.markSchematicChunkForRenderUpdate(pos);
         }
     }
+
+    @Inject(method = "processPendingUpdate", at = @At("HEAD"))
+    private void onSetBlockStateWithoutNeighborUpdates(BlockPos pos, BlockState state, Vec3d playerPos, CallbackInfo ci)
+    {
+        // TODO it is necessary?
+        SchematicVerifier.markVerifierBlockChanges(pos);
+
+        if (Configs.Visuals.ENABLE_RENDERING.getBooleanValue() &&
+                Configs.Visuals.ENABLE_SCHEMATIC_RENDERING.getBooleanValue())
+        {
+            SchematicWorldRefresher.INSTANCE.markSchematicChunkForRenderUpdate(pos);
+        }
+    }
+
+
 }

@@ -15,15 +15,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.GlUniform;
 import net.minecraft.client.gl.VertexBuffer;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.BufferBuilderStorage;
-import net.minecraft.client.render.BufferRenderer;
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.Frustum;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.Shader;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.*;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
@@ -186,7 +178,7 @@ public class WorldRendererSchematic
             }
 
             this.displayListEntitiesDirty = true;
-            this.renderDistanceChunks = this.mc.options.viewDistance;
+            this.renderDistanceChunks = this.mc.options.getViewDistance().getValue();
 
             if (this.chunkRendererDispatcher != null)
             {
@@ -223,7 +215,7 @@ public class WorldRendererSchematic
     {
         this.world.getProfiler().push("setup_terrain");
 
-        if (this.chunkRendererDispatcher == null || this.mc.options.viewDistance != this.renderDistanceChunks)
+        if (this.chunkRendererDispatcher == null || this.mc.options.getViewDistance().getValue() != this.renderDistanceChunks)
         {
             this.loadRenderers();
         }
@@ -277,7 +269,7 @@ public class WorldRendererSchematic
         BlockPos viewPos = new BlockPos(cameraX, cameraY + (double) entity.getStandingEyeHeight(), cameraZ);
         final int centerChunkX = (viewPos.getX() >> 4);
         final int centerChunkZ = (viewPos.getZ() >> 4);
-        final int renderDistance = this.mc.options.viewDistance;
+        final int renderDistance = this.mc.options.getViewDistance().getValue();
         SubChunkPos viewSubChunk = new SubChunkPos(centerChunkX, viewPos.getY() >> 4, centerChunkZ);
         BlockPos viewPosSubChunk = new BlockPos(viewSubChunk.getX() << 4, viewSubChunk.getY() << 4, viewSubChunk.getZ() << 4);
 
@@ -500,7 +492,9 @@ public class WorldRendererSchematic
                 }
 
                 buffer.bind();
-                buffer.drawVertices();
+                buffer.drawElements();
+                // add this line it works, but why?
+                VertexBuffer.unbind();
                 startedDrawing = true;
 
                 ++count;
@@ -525,7 +519,6 @@ public class WorldRendererSchematic
         }
 
         VertexBuffer.unbind();
-        VertexBuffer.unbindVertexArray();
         renderLayer.endDrawing();
 
         this.world.getProfiler().pop();
@@ -602,7 +595,9 @@ public class WorldRendererSchematic
 
                     matrixStack.push();
                     matrixStack.translate(chunkOrigin.getX() - x, chunkOrigin.getY() - y, chunkOrigin.getZ() - z);
-                    buffer.setShader(matrixStack.peek().getPositionMatrix(), projMatrix, shader);
+                    buffer.bind();
+                    buffer.draw(matrixStack.peek().getPositionMatrix(), projMatrix, shader);
+                    VertexBuffer.unbind();
                     matrixStack.pop();
                 }
             }
@@ -641,9 +636,9 @@ public class WorldRendererSchematic
         }
     }
 
-    public boolean renderFluid(BlockRenderView world, FluidState state, BlockPos pos, BufferBuilder bufferBuilderIn)
+    public void renderFluid(BlockRenderView world, FluidState state, BlockPos pos, BufferBuilder bufferBuilderIn)
     {
-        return this.blockRenderManager.renderFluid(pos, world, bufferBuilderIn, state.getBlockState(), state);
+        this.blockRenderManager.renderFluid(pos, world, bufferBuilderIn, state.getBlockState(), state);
     }
 
     public BakedModel getModelForState(BlockState state)

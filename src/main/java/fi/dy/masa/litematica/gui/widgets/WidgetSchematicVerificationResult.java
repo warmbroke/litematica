@@ -29,6 +29,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.random.SimpleRandom;
 import net.minecraft.util.registry.Registry;
 import fi.dy.masa.litematica.config.Configs;
 import fi.dy.masa.litematica.gui.GuiSchematicVerifier;
@@ -52,7 +53,7 @@ import fi.dy.masa.malilib.util.StringUtils;
 
 public class WidgetSchematicVerificationResult extends WidgetListEntrySortable<BlockMismatchEntry>
 {
-    private static final Random RAND = new Random();
+    private static final SimpleRandom RAND = new SimpleRandom(0);
 
     public static final String HEADER_EXPECTED = "litematica.gui.label.schematic_verifier.expected";
     public static final String HEADER_FOUND = "litematica.gui.label.schematic_verifier.found";

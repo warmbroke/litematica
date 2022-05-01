@@ -386,10 +386,14 @@ public class ChunkRendererSchematicVbo
                     this.preRenderBlocks(bufferSchematic, layer);
                 }
 
-                if (this.worldRenderer.renderFluid(this.schematicWorldView, fluidState, pos, bufferSchematic))
-                {
-                    usedLayers.add(layer);
-                }
+//                if (this.worldRenderer.renderFluid(this.schematicWorldView, fluidState, pos, bufferSchematic))
+//                {
+//                    usedLayers.add(layer);
+//                }
+                this.worldRenderer.renderFluid(this.schematicWorldView, fluidState, pos, bufferSchematic);
+                usedLayers.add(layer);
+
+
             }
 
             if (stateSchematic.getRenderType() != BlockRenderType.INVISIBLE)
@@ -753,7 +757,6 @@ public class ChunkRendererSchematicVbo
             chunkRenderData.setBlockBufferState(layer, buffer.popState());
         }
 
-        buffer.end();
     }
 
     private void preRenderOverlay(BufferBuilder buffer, OverlayRenderType type)
@@ -780,7 +783,6 @@ public class ChunkRendererSchematicVbo
             chunkRenderData.setOverlayBufferState(type, buffer.popState());
         }
 
-        buffer.end();
     }
 
     public ChunkRenderTaskSchematic makeCompileTaskChunkSchematic(Supplier<Vec3d> cameraPosSupplier)

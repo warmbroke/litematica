@@ -55,7 +55,7 @@ public class ChunkRenderWorkerLitematica implements Runnable
             catch (Throwable throwable)
             {
                 CrashReport crashreport = CrashReport.create(throwable, "Batching chunks");
-                MinecraftClient.getInstance().setCrashReportSupplier(() -> MinecraftClient.getInstance().addDetailsToCrashReport(crashreport));
+                MinecraftClient.getInstance().setCrashReportSupplier(MinecraftClient.getInstance().addDetailsToCrashReport(crashreport));
                 return;
             }
         }
@@ -228,7 +228,7 @@ public class ChunkRenderWorkerLitematica implements Runnable
 
                     if ((throwable instanceof CancellationException) == false && (throwable instanceof InterruptedException) == false)
                     {
-                        MinecraftClient.getInstance().setCrashReportSupplier(() -> CrashReport.create(throwable, "Rendering Litematica chunk"));
+                        MinecraftClient.getInstance().setCrashReportSupplier(CrashReport.create(throwable, "Rendering Litematica chunk"));
                     }
                 }
             }, MoreExecutors.directExecutor());

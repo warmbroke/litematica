@@ -21,10 +21,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypeFilter;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.*;
 import net.minecraft.util.profiler.Profiler;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.DynamicRegistryManager;
@@ -63,7 +60,7 @@ public class WorldSchematic extends World
                              RegistryEntry<DimensionType> dimensionType,
                              Supplier<Profiler> supplier)
     {
-        super(mutableWorldProperties, REGISTRY_KEY, dimensionType, supplier, true, true, 0L);
+        super(mutableWorldProperties, REGISTRY_KEY, dimensionType, supplier, true, true, 0L, 1000000);
 
         this.mc = MinecraftClient.getInstance();
         this.worldRenderer = LitematicaRenderer.getInstance().getWorldRenderer();
@@ -430,6 +427,11 @@ public class WorldSchematic extends World
     }
 
     @Override
+    public void emitGameEvent(GameEvent event, Vec3d pos, @org.jetbrains.annotations.Nullable GameEvent.Emitter emitter) {
+
+    }
+
+    @Override
     public void emitGameEvent(@org.jetbrains.annotations.Nullable Entity entity, GameEvent event, BlockPos pos)
     {
         // NO-OP
@@ -469,6 +471,16 @@ public class WorldSchematic extends World
     public void playSound(PlayerEntity player, BlockPos pos, SoundEvent soundIn, SoundCategory category, float volume, float pitch)
     {
         // NO-OP
+    }
+
+    @Override
+    public void playSound(@org.jetbrains.annotations.Nullable PlayerEntity except, double x, double y, double z, SoundEvent sound, SoundCategory category, float volume, float pitch, long seed) {
+
+    }
+
+    @Override
+    public void playSoundFromEntity(@org.jetbrains.annotations.Nullable PlayerEntity except, Entity entity, SoundEvent sound, SoundCategory category, float volume, float pitch, long seed) {
+
     }
 
     @Override
