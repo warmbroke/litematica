@@ -757,6 +757,7 @@ public class ChunkRendererSchematicVbo
             chunkRenderData.setBlockBufferState(layer, buffer.popState());
         }
 
+        buffer.end();
     }
 
     private void preRenderOverlay(BufferBuilder buffer, OverlayRenderType type)
@@ -782,7 +783,7 @@ public class ChunkRendererSchematicVbo
             buffer.sortFrom(x, y, z);
             chunkRenderData.setOverlayBufferState(type, buffer.popState());
         }
-
+        buffer.end();
     }
 
     public ChunkRenderTaskSchematic makeCompileTaskChunkSchematic(Supplier<Vec3d> cameraPosSupplier)

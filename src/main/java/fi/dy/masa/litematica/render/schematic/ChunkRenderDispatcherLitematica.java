@@ -325,7 +325,16 @@ public class ChunkRenderDispatcherLitematica
 
     private void uploadVertexBuffer(BufferBuilder buffer, VertexBuffer vertexBuffer)
     {
-        BufferBuilder.class_7433 renderBuffer = buffer.end();
+        BufferBuilder.class_7433 renderBuffer;
+        if (buffer instanceof CompatBuffer compatBuffer) {
+            if (compatBuffer.lastRenderBuildBuffer != null) {
+                renderBuffer = compatBuffer.lastRenderBuildBuffer;
+            } else {
+                renderBuffer = compatBuffer.end();
+            }
+        } else {
+            renderBuffer = buffer.end();
+        }
         vertexBuffer.bind();
         vertexBuffer.upload(renderBuffer);
         VertexBuffer.unbind();

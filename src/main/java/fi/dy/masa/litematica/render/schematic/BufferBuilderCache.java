@@ -8,39 +8,39 @@ import fi.dy.masa.litematica.render.schematic.ChunkRendererSchematicVbo.OverlayR
 
 public class BufferBuilderCache
 {
-    private final Map<RenderLayer, BufferBuilder> blockBufferBuilders = new HashMap<>();
-    private BufferBuilder[] overlayBufferBuilders;
+    private final Map<RenderLayer, CompatBuffer> blockBufferBuilders = new HashMap<>();
+    private CompatBuffer[] overlayBufferBuilders;
 
     public BufferBuilderCache()
     {
         for (RenderLayer layer : RenderLayer.getBlockLayers())
         {
-            this.blockBufferBuilders.put(layer, new BufferBuilder(layer.getExpectedBufferSize()));
+            this.blockBufferBuilders.put(layer, new CompatBuffer(layer.getExpectedBufferSize()));
         }
 
-        this.overlayBufferBuilders = new BufferBuilder[OverlayRenderType.values().length];
+        this.overlayBufferBuilders = new CompatBuffer[OverlayRenderType.values().length];
 
         for (int i = 0; i < this.overlayBufferBuilders.length; ++i)
         {
-            this.overlayBufferBuilders[i] = new BufferBuilder(262144);
+            this.overlayBufferBuilders[i] = new CompatBuffer(262144);
         }
     }
 
-    public BufferBuilder getBlockBufferByLayer(RenderLayer layer)
+    public CompatBuffer getBlockBufferByLayer(RenderLayer layer)
     {
         return this.blockBufferBuilders.get(layer);
     }
 
-    public BufferBuilder getOverlayBuffer(OverlayRenderType type)
+    public CompatBuffer getOverlayBuffer(OverlayRenderType type)
     {
         return this.overlayBufferBuilders[type.ordinal()];
     }
 
     public void clear()
     {
-        this.blockBufferBuilders.values().forEach(BufferBuilder::reset);
+        this.blockBufferBuilders.values().forEach(CompatBuffer::reset);
 
-        for (BufferBuilder buffer : this.overlayBufferBuilders)
+        for (CompatBuffer buffer : this.overlayBufferBuilders)
         {
             buffer.reset();
         }
