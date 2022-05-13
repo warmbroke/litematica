@@ -515,7 +515,7 @@ public class WorldRendererSchematic
 
         if (startedDrawing)
         {
-            renderLayer.getVertexFormat().endDrawing();
+            renderLayer.getVertexFormat().clearState();
         }
 
         VertexBuffer.unbind();
