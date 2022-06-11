@@ -14,7 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
-import net.minecraft.util.math.random.SimpleRandom;
+import net.minecraft.util.math.random.LocalRandom;
 import net.minecraft.world.World;
 import fi.dy.masa.litematica.util.BlockInfoAlignment;
 import fi.dy.masa.litematica.util.PositionUtils;
@@ -27,7 +27,7 @@ import fi.dy.masa.malilib.util.StringUtils;
 
 public class RenderUtils
 {
-    private static final SimpleRandom RAND = new SimpleRandom(0);
+    private static final LocalRandom RAND = new LocalRandom(0);
 
     public static int getMaxStringRenderLength(List<String> list)
     {

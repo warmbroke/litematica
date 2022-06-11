@@ -8,7 +8,7 @@ public class CompatBuffer extends BufferBuilder {
 
 
     @Nullable
-    public class_7433 lastRenderBuildBuffer;
+    public BuiltBuffer lastRenderBuildBuffer;
 
     public boolean first = true;
 
@@ -30,7 +30,7 @@ public class CompatBuffer extends BufferBuilder {
     }
 
     @Override
-    public class_7433 end() {
+    public BuiltBuffer end() {
         lastRenderBuildBuffer = super.end();
         return lastRenderBuildBuffer;
     }

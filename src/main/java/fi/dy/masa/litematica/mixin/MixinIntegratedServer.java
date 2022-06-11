@@ -3,6 +3,8 @@ package fi.dy.masa.litematica.mixin;
 import java.net.Proxy;
 import java.util.function.BooleanSupplier;
 import javax.annotation.Nullable;
+
+import net.minecraft.util.ApiServices;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.At.Shift;
@@ -23,18 +25,8 @@ import fi.dy.masa.litematica.scheduler.TaskScheduler;
 @Mixin(IntegratedServer.class)
 public abstract class MixinIntegratedServer extends MinecraftServer
 {
-    private MixinIntegratedServer(Thread serverThread,
-                                  LevelStorage.Session session,
-                                  ResourcePackManager dataPackManager,
-                                  SaveLoader saveLoader,
-                                  Proxy proxy,
-                                  DataFixer dataFixer,
-                                  @Nullable MinecraftSessionService sessionService,
-                                  @Nullable GameProfileRepository gameProfileRepo,
-                                  @Nullable UserCache userCache,
-                                  WorldGenerationProgressListenerFactory worldGenerationProgressListenerFactory)
-    {
-        super(serverThread, session, dataPackManager, saveLoader, proxy, dataFixer, sessionService, gameProfileRepo, userCache, worldGenerationProgressListenerFactory);
+    public MixinIntegratedServer(Thread serverThread, LevelStorage.Session session, ResourcePackManager dataPackManager, SaveLoader saveLoader, Proxy proxy, DataFixer dataFixer, ApiServices apiServices, WorldGenerationProgressListenerFactory worldGenerationProgressListenerFactory) {
+        super(serverThread, session, dataPackManager, saveLoader, proxy, dataFixer, apiServices, worldGenerationProgressListenerFactory);
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", shift = Shift.AFTER,
