@@ -5,7 +5,10 @@ import javax.annotation.Nullable;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.tag.BlockTags;
+import net.minecraft.util.registry.BuiltinRegistries;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryEntry;
+import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.dimension.DimensionType;
 import fi.dy.masa.litematica.Litematica;
@@ -16,9 +19,10 @@ import net.minecraft.world.dimension.DimensionTypes;
 public class SchematicWorldHandler
 {
     @Nullable private static WorldSchematic world;
-    public static final DimensionType DIMENSIONTYPE = new DimensionType(OptionalLong.of(6000L), false, false, false, false, 1.0,
-                                                                           false, false, false, false, -64, 384, 384,
-                                                                            BlockTags.INFINIBURN_END, DimensionTypes.OVERWORLD_ID, 0.0F);
+//    public static final DimensionType DIMENSIONTYPE = new DimensionType(OptionalLong.of(6000L), false, false, false, false, 1.0,
+//                                                                           false, false, false, false, -64, 384, 384,
+//                                                                            BlockTags.INFINIBURN_END, DimensionTypes.OVERWORLD_ID, 0.0F);
+    public static final RegistryEntry<DimensionType> DIMENSIONTYPE = BuiltinRegistries.DIMENSION_TYPE.entryOf(DimensionTypes.OVERWORLD);
 
     @Nullable
     public static WorldSchematic getSchematicWorld()
@@ -29,7 +33,7 @@ public class SchematicWorldHandler
     public static WorldSchematic createSchematicWorld()
     {
         ClientWorld.Properties levelInfo = new ClientWorld.Properties(Difficulty.PEACEFUL, false, true);
-        return new WorldSchematic(levelInfo, RegistryEntry.of(DIMENSIONTYPE), MinecraftClient.getInstance()::getProfiler);
+        return new WorldSchematic(levelInfo, DIMENSIONTYPE, MinecraftClient.getInstance()::getProfiler);
     }
 
     public static void recreateSchematicWorld(boolean remove)
