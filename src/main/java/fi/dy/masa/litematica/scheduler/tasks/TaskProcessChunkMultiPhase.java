@@ -127,7 +127,7 @@ public abstract class TaskProcessChunkMultiPhase extends TaskProcessChunkBase
         if (Configs.Generic.COMMAND_DISABLE_FEEDBACK.getBooleanValue())
         {
             DataManager.addChatListener(this.gameRuleListener);
-            this.mc.player.sendChatMessage("/gamerule sendCommandFeedback");
+            this.mc.player.sendCommand("gamerule sendCommandFeedback");
             this.gameRuleProbeTimeout = Util.getMeasuringTimeNano() + this.maxGameRuleProbeTime;
             this.phase = TaskPhase.GAME_RULE_PROBE;
         }
@@ -158,7 +158,7 @@ public abstract class TaskProcessChunkMultiPhase extends TaskProcessChunkBase
 
                 if (this.shouldEnableFeedback)
                 {
-                    this.mc.player.sendChatMessage("/gamerule sendCommandFeedback false");
+                    this.mc.player.sendCommand("gamerule sendCommandFeedback false");
                 }
 
                 return true;
@@ -254,11 +254,11 @@ public abstract class TaskProcessChunkMultiPhase extends TaskProcessChunkBase
     {
         if (command.length() > 0 && command.charAt(0) != '/')
         {
-            player.sendChatMessage("/" + command);
+            player.sendCommand(command);
         }
         else
         {
-            player.sendChatMessage(command);
+            player.sendCommand(command.substring(1));
         }
     }
 }

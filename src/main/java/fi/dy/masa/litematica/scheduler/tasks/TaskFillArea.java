@@ -83,7 +83,7 @@ public class TaskFillArea extends TaskProcessChunkMultiPhase
 
         if (this.useWorldEdit && this.mc.player != null)
         {
-            this.mc.player.sendChatMessage("//perf neighbors off");
+            this.mc.player.sendCommand("/perf neighbors off");
         }
     }
 
@@ -254,12 +254,12 @@ public class TaskFillArea extends TaskProcessChunkMultiPhase
 
         if (this.useWorldEdit)
         {
-            this.mc.player.sendChatMessage("//perf neighbors on");
+            this.mc.player.sendCommand("/perf neighbors on");
         }
 
         if (this.mc.player != null && this.shouldEnableFeedback)
         {
-            this.mc.player.sendChatMessage("/gamerule sendCommandFeedback true");
+            this.mc.player.sendCommand("gamerule sendCommandFeedback true");
         }
 
         DataManager.removeChatListener(this.gameRuleListener);
