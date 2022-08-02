@@ -6,12 +6,21 @@ sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
 repositories {
-	maven { url 'https://masa.dy.fi/maven' }
+	//maven { url 'https://masa.dy.fi/maven' }
 	maven { url 'https://maven.terraformersmc.com/releases/' }
-	maven {
-		url 'https://maven.hendrixshen.top'
-	}
+	//maven {
+	//	url 'https://maven.hendrixshen.top'
+	//}
 	// maven { url 'https://maven.quiltmc.org/repository/release/' }
+    ivy {
+        url 'https://github.com/warmbroke'
+        metadataSources {
+            artifact()
+        }
+        patternLayout {
+            artifact "[organization]/releases/download/[classifier]/[artifact]-[revision].jar"
+        }
+    }
 }
 
 ext.configFile = file "build.properties"
@@ -29,7 +38,8 @@ dependencies {
 	implementation "com.google.code.findbugs:jsr305:3.0.2"
 
 //	modImplementation "fi.dy.masa.malilib:malilib-fabric-${config.minecraft_version_out}:${config.malilib_version}"
-	modImplementation("curse.maven:malilib-303119:${config.minecraft_version}")
+//	modImplementation("curse.maven:malilib-303119:${config.minecraft_version}")
+	modImplementation("malilib:malilib-fabric:1.19.1-0.12.1:a577b6e")
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	//modCompile "net.fabricmc.fabric-api:fabric-api:" + config.fabric_version
